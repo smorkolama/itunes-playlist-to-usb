@@ -1,4 +1,4 @@
-# ITunes Playlist To USB
+# iTunes Playlist To USB
 
 ## The Problem
 Lots of cars now have USB interfaces to allow you to bring music with you. Those are great because you can buy a USB stick for much lower $/GB ($6 for 16gb = $0.37/gb) than by getting the storage space as part of an iPod ($139.99 for 16gb = $8.75/gb).
@@ -29,7 +29,7 @@ ruby playlist_exporter.rb process
 
 ![Run in Terminal](https://github.com/stevenchanin/itunes-playlist-to-usb/raw/master/doc/images/terminal.png)
 
-and it will copy all the songs from the playlist onto the USB stick organized in a hierarchy of Artist (Album artist if available, otheriwse Artist)  and Album using the iTunes meta data.  It will generate new file names that are
+and it will copy all the songs from the playlist onto the USB stick organized in a hierarchy of Artist (Album artist if available, otherwise Artist)  and Album using the iTunes meta data.  It will generate new file names that are
 
 ~~~~
 	<track number>-<song name from iTunes>
