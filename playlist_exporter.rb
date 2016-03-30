@@ -84,11 +84,12 @@ class PlaylistExporter < Thor
 
   def add_track_to_catalog(info)
     name = clean_string(info["Name"])
-    album = clean_string(info["Album"], 25)
+    album = clean_string(info["Album"], 40)
     genre = clean_string(info["Genre"], 20)
-    artist = clean_string(info["Artist"], 25)
-    album_artist = clean_string(info["Album Artist"], 25)
+    artist = clean_string(info["Artist"], 40)
+    album_artist = clean_string(info["Album Artist"], 40)
     track_number = info["Track Number"] || 0
+    disc_number = info["Disc Number"] || 0
     file_uri = URI(info["Location"])
 
     original_file = URI.decode(file_uri.path)
@@ -97,22 +98,24 @@ class PlaylistExporter < Thor
 
 	 if album_artist != 'Blank'
 		 @catalog[album_artist] ||= {}
-		 @catalog[album_artist][album] ||= []
+		 album_with_disc="#{album}_%02d" % disc_number
+		 @catalog[album_artist][album_with_disc] ||= []
 
-    if options.verbose?
+		 if options.verbose?
       puts "    Cataloging   : #{name} / #{album} / #{genre} / #{track_number}"
-    end
-    target_name = "%02d-#{name}.#{file_type}" % track_number
-		 @catalog[album_artist][album] << {:name => target_name, :file => original_file}
+		 end
+		 target_name = "%02d-#{name}.#{file_type}" % track_number
+		 @catalog[album_artist][album_with_disc] << {:name => target_name, :file => original_file}
 	 else
 		 @catalog[artist] ||= {}
-		 @catalog[artist][album] ||= []
+		 album_with_disc="#{album}_%02d" % disc_number
+		 @catalog[artist][album_with_disc] ||= []
 
 		 if options.verbose?
 			puts "    Cataloging   : #{name} / #{album} / #{genre} / #{track_number}"
 		 end
 		 target_name = "%02d-#{name}.#{file_type}" % track_number
-		 @catalog[artist][album] << {:name => target_name, :file => original_file}
+		 @catalog[artist][album_with_disc] << {:name => target_name, :file => original_file}
 	 end
 
   end
@@ -126,7 +129,7 @@ class PlaylistExporter < Thor
       s = s[0, cutoff_at]
     end
 
-    s && s.gsub(/\/|\(|\)/, '_')
+    s && s.gsub(/\%|\/|\(|\)/, '_')
   end
 
   def copy_catalog
